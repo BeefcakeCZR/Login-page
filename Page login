@@ -1,0 +1,78 @@
+import java.util.HashMap;
+import java.util.Scanner;
+
+public class UserAuthentication {
+    // HashMap to store user information (username as key, password as value)
+    private static HashMap<String, String> users = new HashMap<>();
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        boolean isRunning = true;
+
+        while (isRunning) {
+            System.out.println("Welcome to EasyKanban");
+            System.out.println("1. Register");
+            System.out.println("2. Login");
+            System.out.println("3. Quit");
+
+            int choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    registerUser(scanner);
+                    break;
+                case 2:
+                    boolean isLoggedIn = loginUser(scanner);
+                    if (isLoggedIn) {
+                        System.out.println("Login successful!");
+                    } else {
+                        System.out.println("Login failed. Please try again.");
+                    }
+                    break;
+                case 3:
+                    isRunning = false;
+                    System.out.println("Goodbye!");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please select a valid option.");
+            }
+        }
+    }
+
+    private static void registerUser(Scanner scanner) {
+        System.out.println("Enter username: ");
+        String username = scanner.next();
+        System.out.println("Enter password: ");
+        String password = scanner.next();
+
+        if (isValidUsername(username) && isValidPassword(password)) {
+            users.put(username, password);
+            System.out.println("Registration successful!");
+        } else {
+            System.out.println("Registration failed. Please check username and password requirements.");
+        }
+    }
+
+    private static boolean loginUser(Scanner scanner) {
+        System.out.println("Enter username: ");
+        String username = scanner.next();
+        System.out.println("Enter password: ");
+        String password = scanner.next();
+
+        if (users.containsKey(username) && users.get(username).equals(password)) {
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean isValidUsername(String username) {
+        return username.contains("_") && username.length() <= 5;
+    }
+
+    private static boolean isValidPassword(String password) {
+        return password.length() >= 8 &&
+               password.matches(".*[A-Z].*") &&
+               password.matches(".*\\d.*") &&
+               password.matches(".*[@#$%^&+=].*");
+    }
+}
